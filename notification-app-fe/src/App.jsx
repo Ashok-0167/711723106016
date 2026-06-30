@@ -5,19 +5,18 @@ import { NotificationFilter } from "./components/NotificationFilter";
 const API_URL = "http://4.224.186.213/evaluation-service/notifications";
 
 function App() {
-  const [notifications, setNotifications] = useState([]);
-  const [filter, setFilter] = useState("All");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [items, setItems] = useState([]);
+  const [f, setF] = useState("All");
+  const [ld, setLd] = useState(true);
+  const [err, setErr] = useState("");
 
   useEffect(() => {
     async function load() {
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error(`Failed to fetch notifications (${response.status})`);
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error(`Failed to fetch notifications (${res.status})`);
 
-        const data = await response.json();
-
+        const data = await res.json();
         const list = Array.isArray(data)
           ? data
           : Array.isArray(data.notifications)
@@ -26,14 +25,14 @@ function App() {
           ? data.data
           : [];
 
-        setNotifications(list);
-        setError("");
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-        setNotifications([]);
+        setItems(list);
+        setErr("");
+      } catch (e) {
+        console.error(e);
+        setErr(e.message);
+        setItems([]);
       } finally {
-        setLoading(false);
+        setLd(false);
       }
     }
 
@@ -48,23 +47,20 @@ function App() {
     return 0;
   };
 
-  let list = [...notifications];
+  let list = [...items];
 
   list.sort((a, b) => {
-    const aWeight = getW(a.type);
-    const bWeight = getW(b.type);
+    const aw = getW(a.type);
+    const bw = getW(b.type);
 
-    if (bWeight !== aWeight) {
-      return bWeight - aWeight;
-    }
-
+    if (bw !== aw) return bw - aw;
     return new Date(b.timestamp) - new Date(a.timestamp);
   });
 
   list = list.slice(0, 10);
 
-  if (filter !== "All") {
-    list = list.filter((item) => String(item.type || "").toLowerCase() === filter.toLowerCase());
+  if (f !== "All") {
+    list = list.filter((x) => String(x.type || "").toLowerCase() === f.toLowerCase());
   }
 
   return (
@@ -72,19 +68,19 @@ function App() {
       <h1>Campus Notifications</h1>
 
       <h2>Filter</h2>
-      <NotificationFilter value={filter} onChange={setFilter} />
+      <NotificationFilter value={f} onChange={setF} />
 
       <h2>Priority Inbox (Top 10)</h2>
 
-      {loading ? (
+      {ld ? (
         <p>Loading notifications...</p>
-      ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
+      ) : err ? (
+        <p style={{ color: "red" }}>{err}</p>
       ) : list.length === 0 ? (
         <p>No notifications found.</p>
       ) : (
-        list.map((item) => (
-          <div className="box" key={item.id ?? `${item.type}-${item.timestamp}`}>
+        list.map((item, i) => (
+          <div className="box" key={item.id ?? `${item.type}-${item.timestamp}-${i}`}>
             <p>id: {item.id}</p>
             <p>type: {item.type}</p>
             <p>message: {item.message}</p>
