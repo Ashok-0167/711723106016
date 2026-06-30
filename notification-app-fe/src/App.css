@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+}
+
+.page {
+  width: 850px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 45px;
+  margin: 0 0 5px;
+}
+
+h2 {
+  margin: 25px 0 10px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  margin: 6px 0;
+  padding: 12px;
+  background: #333;
+  color: white;
+  border: 1px solid #999;
+  font-size: 18px;
+}
+
+textarea {
+  height: 70px;
+}
+
+.filters {
+  margin: 15px 0;
+}
+
+button {
+  margin-right: 8px;
+  padding: 7px 12px;
+  background: #555;
+  color: white;
+  border: 1px solid #999;
+  cursor: pointer;
+}
+
+button.active {
+  background: white;
+  color: black;
+}
+
+.box {
+  background: #333;
+  border: 1px solid #777;
+  margin-bottom: 10px;
+  padding: 10px;
+  text-align: left;
+}
+
+.box p {
+  margin: 5px 0;
+  color: #ddd;
+}
